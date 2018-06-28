@@ -3,23 +3,104 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Stock Price Prediction</title>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://stock-price-prediction.herokuapp.com/styles/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="http://localhost:5000/styles/main.css"> -->
+</head>
+
+<body>
+    <div class="container" style="padding: 0; margin: 0; width: 100%; max-width: 100%;">
+        <div class="row" style="width: 100%">
+            <div class="col-md-10" style="width: 100%; padding: 20px">
+                <div class="jumbotron jumbotron-fluid" style="margin-bottom: 0;padding-top: 20px; padding-bottom: 20px; padding-left: 20px">
+                    <h1 class="display-4" style="font-size: 2.8rem;">Stock Price Prediction</h1>
+                    <p class="lead" style="font-size: 1.2rem">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                    <hr class="my-4">
+                    <p>Trying to predict the stock market is an enticing prospect to data scientists motivated not so much as a desire for material gain, but for the challenge.We see the daily up and downs of the market and imagine there must be patterns we, or our models, can learn in order to beat all those day traders with business degrees.</p>
+                </div>
+                <div class="data" style="padding-top: 20px;padding-left: 20px;">
+                    <p class="lead">Actual Data</p>
+                    <div id="chartdiv1"></div>
+                    <p class="lead">Predicted Data</p>
+                    <div id="chartdiv2"></div>
+                </div>
+            </div>
+            <div class="col-md-2" style="width: 100%; border-left: 1px solid rgba(0,0,0,.125);">
+                <div class="methods-container" style="width: 100%; padding: 20px;">
+                    <h1 class="display-4" style="margin-bottom: 15px; font-size: 2rem;font-weight: 500">Methods</h1>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                        <label class="form-check-label" for="exampleRadios1">
+                            Linear Regression
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                        <label class="form-check-label" for="exampleRadios2">
+                            ARIMA 
+                        </label>
+                    </div>
+                    <div class="form-check disabled">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+                        <label class="form-check-label" for="exampleRadios3">
+                            Long Short Term Memory
+                        </label>
+                    </div>
+                </div>
+                <div class="stocks-container" style="width: 100%; padding: 20px;">
+                    <h1 class="display-4" style="margin-bottom: 15px; font-size: 2rem;font-weight: 500">Stocks</h1>
+                    <ul class="list-group" id="stocks" style="height: 650px; overflow-y: scroll;">
+                        <li class="list-group-item">Apple Inc. <p class="lead">AAPL</p></li>
+                        <li class="list-group-item">Pandora <p class="lead">P</p></li>
+                        <li class="list-group-item">Microsoft <p class="lead">MSFT</p></li>
+                        <li class="list-group-item">Alphabet <p class="lead">GOOGL</p></li>
+                        <li class="list-group-item">IBM <p class="lead">IBM</p></li>
+                        <li class="list-group-item">Intel <p class="lead">INTC</p></li>
+                        <li class="list-group-item">Cisco Systems <p class="lead">CSCO</p></li>
+                        <li class="list-group-item">Oracle <p class="lead">ORCL</p></li>
+                        <li class="list-group-item">Facebook <p class="lead">FB</p></li>
+                        <li class="list-group-item">Zynga <p class="lead">ZNGA</p></li>
+                        <li class="list-group-item">HP <p class="lead">HPQ</p></li>
+                        <li class="list-group-item">Walmart <p class="lead">WMT</p></li>
+                        <li class="list-group-item">Tesla <p class="lead">TSLA</p></li>
+                        <li class="list-group-item">Amazon <p class="lead">AMZN</p></li>
+                        <li class="list-group-item">ExxonMobil <p class="lead">XOM</p></li>
+                        <li class="list-group-item">Goldman Sachs <p class="lead">GS</p></li>
+                        <li class="list-group-item">JPMorgan Chase <p class="lead">JPM</p></li>
+                        <li class="list-group-item">Twitter <p class="lead">TWTR</p></li>
+                        <li class="list-group-item">Salesforce <p class="lead">CRM</p></li>
+                        <li class="list-group-item">Macy's <p class="lead">M</p></li>
+                        <li class="list-group-item">Advanced Auto Parts Inc. <p class="lead">AAP</p></li>
+                        <li class="list-group-item">Marathon Oil <p class="lead">MRO</p></li>
+                        <li class="list-group-item">Kroger <p class="lead">KR</p></li>
+                        <li class="list-group-item">Foot Locker <p class="lead">FL</p></li>
+                        <li class="list-group-item">Target <p class="lead">TGT</p></li>
+                        <li class="list-group-item">Bed Bath & Beyond <p class="lead">BBBY</p></li>
+                        <li class="list-group-item">AutoZone <p class="lead">AZO</p></li>
+                        <li class="list-group-item">Under Armour <p class="lead">UAA</p></li>
+                        <li class="list-group-item">Mattel <p class="lead">MAT</p></li>
+                        <li class="list-group-item">Kohl's <p class="lead">KSS</p></li>
+                        <li class="list-group-item">Schlumberger <p class="lead">SLB</p></li>
+                        <li class="list-group-item">TripAdvisor <p class="lead">TRIP</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
     <script src="https://www.amcharts.com/lib/3/serial.js"></script>
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
-    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="https://stock-price-prediction.herokuapp.com/styles/main.css">
     <script src="https://stock-price-prediction.herokuapp.com/scripts/app.js"></script>
-</head>
-
-<body>
-
-    <div id="chartdiv1"></div>
-    <div id="chartdiv2"></div>
-
+    <!-- <script src="http://localhost:5000/scripts/app.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </body>
 
 </html>
