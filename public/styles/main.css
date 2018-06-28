@@ -1,19 +1,81 @@
-#chartdiv1 {
+#body-container {
+    padding: 0;
+    margin: 0; 
+    width: 100%; 
+    max-width: 100%;
+}
+
+#body-container>.row {
+    width: 100%;
+}
+
+#main-content {
+    width: 100%; 
+    padding: 20px
+}
+
+#main-content-container {
+    margin-bottom: 0;
+    padding-top: 20px; 
+    padding-bottom: 20px; 
+    padding-left: 20px
+}
+
+#main-content-head {
+    font-size: 2.8rem;
+}
+
+#main-desc-1 {
+    font-size: 1.2rem;
+}
+
+#data {
+    padding-top: 20px;
+    padding-left: 20px;
+}
+
+#data>.chart {
     margin-top: 40px;
     width: 90%;
     height: 250px;
 }
 
-#chartdiv2 {
-    margin-top: 40px;
-    width: 80%;
-    height: 250px;
+#sidebar {
+    width: 100%; 
+    border-left: 1px solid rgba(0,0,0,.125);
+    padding: 20px;
 }
 
-.list-group-item {
+#methods-container {
+    width: 100%; 
+}
+
+#methods-head {
+    margin-bottom: 15px; 
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+#stocks-container {
+    width: 100%; 
+    margin-top: 25px;
+}
+
+#stocks-head {
+    margin-bottom: 15px; 
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+#stocks-list {
+    height: 650px; 
+    overflow-y: scroll;
+}
+
+#stocks-list>.list-group-item {
     padding-top: .3rem .8rem;
 }
 
-.list-group-item>.lead {
+#stocks-list>.list-group-item>.lead {
     font-size: .8rem;
 }

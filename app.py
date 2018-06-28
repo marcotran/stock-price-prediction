@@ -31,6 +31,7 @@ def getStockData(method):
     stock = "IBM"
     quandl.ApiConfig.api_key = "qWcicxSctVxrP9PhyneG"
     allData = quandl.get('WIKI/'+stock)
+    print(allData)
     dataLength = 251
     allDataLength = len(allData)
     firstDataElem = math.floor(random.random()*(allDataLength-dataLength))
@@ -75,5 +76,6 @@ def getStockData(method):
     return jsonify(data)
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    # port = int(os.environ.get('PORT', 5000))
+    # app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True)
