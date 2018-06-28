@@ -1,6 +1,5 @@
 import requests
 from flask import Flask, request, jsonify, send_from_directory
-app = Flask(__name__)
 import pandas as pd
 import quandl
 import math
@@ -10,23 +9,26 @@ import numpy as np
 from sklearn import preprocessing, cross_validation, svm
 import sklearn.linear_model as lin
 
-if 'ON_HEROKU' in os.environ:
-    @app.route('/')
-    def index():
-        return send_from_directory('public','index.html')
-    @app.route('/index.html')
-    def index2():
-        return send_from_directory('public','index.html')
-    @app.route('/scripts/app.js')
-    def index_scripts():
-        return send_from_directory('public/scripts', 'app.js')
-    @app.route('/styles/main.css')
-    def index_styles():
-        return send_from_directory('public/styles', 'main.css')
+app = Flask(__name__)
+
+# if 'ON_HEROKU' in os.environ:
+@app.route('/')
+def index():
+    return send_from_directory('public','index.html')
+@app.route('/index.html')
+def index2():
+    return send_from_directory('public','index.html')
+@app.route('/scripts/app.js')
+def index_scripts():
+    return send_from_directory('public/scripts', 'app.js')
+@app.route('/styles/main.css')
+def index_styles():
+    return send_from_directory('public/styles', 'main.css')
 
 @app.route('/getstockdata/<method>')
 def getStockData(method):
-    stock = request.args.get('stock', default=None, type=None)
+    # stock = request.args.get('stock', default=None, type=None)
+    stock = "IBM"
     quandl.ApiConfig.api_key = "qWcicxSctVxrP9PhyneG"
     allData = quandl.get('WIKI/'+stock)
     dataLength = 251
@@ -71,3 +73,7 @@ def getStockData(method):
     print(data)
     data = data.to_json(orient='table')
     return jsonify(data)
+
+if __name__ == '__main__':
+  port = int(os.environ.get('PORT', 5000))
+  app.run(port=port, debug=True)
