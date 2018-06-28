@@ -7,23 +7,30 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Stock Price Prediction</title>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="https://stock-price-prediction.herokuapp.com/styles/main.css">
+    <!-- <link rel="stylesheet" href="https://stock-price-prediction.herokuapp.com/styles/main.css"> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="http://localhost:5000/styles/main.css"> -->
+    <link rel="stylesheet" href="http://localhost:5000/styles/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+    <!-- <script src="https://stock-price-prediction.herokuapp.com/scripts/lib/moment.js"></script> -->
+    <script src="http://localhost:5000/scripts/lib/moment.js"></script>
+    <!-- <script src="https://stock-price-prediction.herokuapp.com/scripts/lib/angular-moment.min.js"></script> -->
+    <script src="http://localhost:5000/scripts/lib/angular-moment.min.js"></script>
+    <!-- <script src="https://stock-price-prediction.herokuapp.com/scripts/chart.js"></script> -->
 </head>
 
 <body>
-    <div id="body-container" class="container">
+    <div id="body-container" class="container" ng-app="stock-price-prediction" ng-controller="MarketController">
         <div class="row">
             <div id="main-content" class="col-md-10">
                 <div id="main-content-container" class="jumbotron jumbotron-fluid">
                     <h1 id="main-content-head" class="display-4">Stock Price Prediction</h1>
-                    <p id="main-desc-1" class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                    <p id="main-desc-1" class="lead">This is a comparative analysis of various regression algorithms that can be used to predict stock prices.</p>
                     <hr class="my-4">
-                    <p id="main-desc-2">Trying to predict the stock market is an enticing prospect to data scientists motivated not so much as a desire for material gain, but for the challenge.We see the daily up and downs of the market and imagine there must be patterns
+                    <p id="main-desc-2">Trying to predict the stock market is an enticing prospect to data scientists motivated not so much as a desire for material gain, but for the challenge. We see the daily up and downs of the market and imagine there must be patterns
                         we, or our models, can learn in order to beat all those day traders with business degrees.</p>
                 </div>
                 <div id="data">
+                    <div class="h5 text-center">{{current_stock.name}} <p class="lead" style="display: inline;font-size: 0.9rem;">{{current_stock.ticker}}</p></div>
                     <p class="lead">Actual Data</p>
                     <div id="chartdiv1" class="chart"></div>
                     <p class="lead">Predicted Data</p>
@@ -34,19 +41,19 @@
                 <div id="methods-container">
                     <h1 id="methods-head" class="display-4">Methods</h1>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                        <input ng-click="changeMethod(1)" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked="false">
                         <label class="form-check-label" for="exampleRadios1">
                             Linear Regression
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                        <input ng-click="changeMethod(2)" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
                         <label class="form-check-label" for="exampleRadios2">
                             ARIMA 
                         </label>
                     </div>
                     <div class="form-check disabled">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+                        <input ng-click="changeMethod(3)" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
                         <label class="form-check-label" for="exampleRadios3">
                             Long Short Term Memory
                         </label>
@@ -55,101 +62,8 @@
                 <div id="stocks-container">
                     <h1 id="stocks-head" class="display-4">Stocks</h1>
                     <ul id="stocks-list" class="list-group">
-                        <li class="list-group-item">Apple Inc.
-                            <p class="lead">AAPL</p>
-                        </li>
-                        <li class="list-group-item">Pandora
-                            <p class="lead">P</p>
-                        </li>
-                        <li class="list-group-item">Microsoft
-                            <p class="lead">MSFT</p>
-                        </li>
-                        <li class="list-group-item">Alphabet
-                            <p class="lead">GOOGL</p>
-                        </li>
-                        <li class="list-group-item">IBM
-                            <p class="lead">IBM</p>
-                        </li>
-                        <li class="list-group-item">Intel
-                            <p class="lead">INTC</p>
-                        </li>
-                        <li class="list-group-item">Cisco Systems
-                            <p class="lead">CSCO</p>
-                        </li>
-                        <li class="list-group-item">Oracle
-                            <p class="lead">ORCL</p>
-                        </li>
-                        <li class="list-group-item">Facebook
-                            <p class="lead">FB</p>
-                        </li>
-                        <li class="list-group-item">Zynga
-                            <p class="lead">ZNGA</p>
-                        </li>
-                        <li class="list-group-item">HP
-                            <p class="lead">HPQ</p>
-                        </li>
-                        <li class="list-group-item">Walmart
-                            <p class="lead">WMT</p>
-                        </li>
-                        <li class="list-group-item">Tesla
-                            <p class="lead">TSLA</p>
-                        </li>
-                        <li class="list-group-item">Amazon
-                            <p class="lead">AMZN</p>
-                        </li>
-                        <li class="list-group-item">ExxonMobil
-                            <p class="lead">XOM</p>
-                        </li>
-                        <li class="list-group-item">Goldman Sachs
-                            <p class="lead">GS</p>
-                        </li>
-                        <li class="list-group-item">JPMorgan Chase
-                            <p class="lead">JPM</p>
-                        </li>
-                        <li class="list-group-item">Twitter
-                            <p class="lead">TWTR</p>
-                        </li>
-                        <li class="list-group-item">Salesforce
-                            <p class="lead">CRM</p>
-                        </li>
-                        <li class="list-group-item">Macy's
-                            <p class="lead">M</p>
-                        </li>
-                        <li class="list-group-item">Advanced Auto Parts Inc.
-                            <p class="lead">AAP</p>
-                        </li>
-                        <li class="list-group-item">Marathon Oil
-                            <p class="lead">MRO</p>
-                        </li>
-                        <li class="list-group-item">Kroger
-                            <p class="lead">KR</p>
-                        </li>
-                        <li class="list-group-item">Foot Locker
-                            <p class="lead">FL</p>
-                        </li>
-                        <li class="list-group-item">Target
-                            <p class="lead">TGT</p>
-                        </li>
-                        <li class="list-group-item">Bed Bath & Beyond
-                            <p class="lead">BBBY</p>
-                        </li>
-                        <li class="list-group-item">AutoZone
-                            <p class="lead">AZO</p>
-                        </li>
-                        <li class="list-group-item">Under Armour
-                            <p class="lead">UAA</p>
-                        </li>
-                        <li class="list-group-item">Mattel
-                            <p class="lead">MAT</p>
-                        </li>
-                        <li class="list-group-item">Kohl's
-                            <p class="lead">KSS</p>
-                        </li>
-                        <li class="list-group-item">Schlumberger
-                            <p class="lead">SLB</p>
-                        </li>
-                        <li class="list-group-item">TripAdvisor
-                            <p class="lead">TRIP</p>
+                        <li ng-repeat="stock in stocks" ng-click="changeStock(stock)" class="list-group-item list-group-item-action">{{stock.name}}
+                            <p class="lead">{{stock.ticker}}</p>
                         </li>
                     </ul>
                 </div>
@@ -161,8 +75,7 @@
     <script src="https://www.amcharts.com/lib/3/serial.js"></script>
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
-    <script src="https://stock-price-prediction.herokuapp.com/scripts/app.js"></script>
-    <!-- <script src="http://localhost:5000/scripts/app.js"></script> -->
+    <script src="http://localhost:5000/scripts/app.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>

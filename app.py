@@ -19,11 +19,20 @@ def index():
 def index2():
     return send_from_directory('public','index.html')
 @app.route('/scripts/app.js')
-def index_scripts():
+def index_app_script():
     return send_from_directory('public/scripts', 'app.js')
+@app.route('/scripts/lib/moment.js')
+def index_moment_script():
+    return send_from_directory('public/scripts/lib', 'moment.js')
+@app.route('/scripts/lib/angular-moment.min.js')
+def index_angular_moment_script():
+    return send_from_directory('public/scripts/lib', 'angular-moment.min.js')
 @app.route('/styles/main.css')
 def index_styles():
     return send_from_directory('public/styles', 'main.css')
+@app.route('/data/stocks.json')
+def index_json_data():
+    return send_from_directory('public/data', 'stocks.json')
 
 @app.route('/getstockdata/<method>')
 def getStockData(method):
@@ -76,5 +85,6 @@ def getStockData(method):
     return jsonify(data)
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    # port = int(os.environ.get('PORT', 5000))
+    # app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True)

@@ -11,14 +11,12 @@
 
 #main-content {
     width: 100%; 
-    padding: 20px
+    padding: 0px 20px 0px 0px;
 }
 
 #main-content-container {
+    padding: 20px 10px 10px 40px;
     margin-bottom: 0;
-    padding-top: 20px; 
-    padding-bottom: 20px; 
-    padding-left: 20px
 }
 
 #main-content-head {
@@ -27,6 +25,10 @@
 
 #main-desc-1 {
     font-size: 1.2rem;
+}
+
+#main-desc-1 {
+    margin-bottom: 0;
 }
 
 #data {
@@ -68,12 +70,16 @@
 }
 
 #stocks-list {
-    height: 650px; 
+    height: 680px; 
     overflow-y: scroll;
 }
 
 #stocks-list>.list-group-item {
     padding-top: .3rem .8rem;
+}
+
+#stocks-list>.list-group-item:hover {
+    cursor: pointer;
 }
 
 #stocks-list>.list-group-item>.lead {
