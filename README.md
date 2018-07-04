@@ -18,7 +18,7 @@ In order to run a dev server on your local host, you will need to install the re
 `cd ..`
 `pip install -r requirements.txt`
 
-Now you can open up an additional terminal and start up a server for the backend on port 5000:
+Now you can open up a terminal and start up a server for the backend on port 5000:
 
 `set FLASK_APP=app.py`
 

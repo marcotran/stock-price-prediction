@@ -4,6 +4,8 @@ myApp.controller('MarketController', ['$scope', '$http', 'moment', function($sco
 
     $scope.stocks = [];
     $scope.current_stock = {};
+
+    var chart_config = {};
     
     readTextFile("/data/stocks.json", function(text){
         var data = JSON.parse(text);
@@ -14,14 +16,16 @@ myApp.controller('MarketController', ['$scope', '$http', 'moment', function($sco
         });
     });
 
-    $http.get("/getstockdata/fdlj").then(function(response) {
+    readTextFile("/data/chart_config.json", function(text){
+        var data = JSON.parse(text);
+        chart_config = data;
+    });
+
+    $http.get("/getstockdata/").then(function(response) {
         var data = JSON.parse(response.data).data;
-        var date = new Date(data[0]["Date"]);
 
         var actualData = [];
         var predictedData = [];
-
-        console.log(data[0]);
 
         for (var i = 0; i < data.length; i++) {
             actualData[i] = {};
@@ -31,7 +35,9 @@ myApp.controller('MarketController', ['$scope', '$http', 'moment', function($sco
             actualData[i].value = data[i]["EOD"];
             predictedData[i].value = data[i]["prediction"];
         }
-        var chart1 = getChart("chartdiv1", actualData);
+        var chart_config_1 = JSON.parse(JSON.stringify(chart_config));
+        chart_config_1.dataProvider = actualData;
+        var chart1 = getChart("chartdiv1", chart_config_1);
         chart1.addListener("rendered", zoomChart1);
         zoomChart1();
         
@@ -39,7 +45,9 @@ myApp.controller('MarketController', ['$scope', '$http', 'moment', function($sco
             chart1.zoomToIndexes(chart1.dataProvider.length - 40, chart1.dataProvider.length - 1);
         }
 
-        var chart2 = getChart("chartdiv2", predictedData);
+        var chart_config_2 = JSON.parse(JSON.stringify(chart_config));
+        chart_config_2.dataProvider = predictedData;
+        var chart2 = getChart("chartdiv2", chart_config_2);
         chart2.addListener("rendered", zoomChart2);
         zoomChart2();
         
@@ -62,82 +70,5 @@ function readTextFile(file, callback) {
 }
 
 function getChart(chart, data) {
-
-    return AmCharts.makeChart(chart, {
-        "type": "serial",
-        "theme": "light",
-        "marginRight": 40,
-        "marginLeft": 40,
-        "autoMarginOffset": 20,
-        "mouseWheelZoomEnabled": true,
-        "dataDateFormat": "YYYY-MM-DD",
-        "valueAxes": [{
-            "id": "v1",
-            "axisAlpha": 0,
-            "position": "left",
-            "ignoreAxisWidth": true
-        }],
-        "balloon": {
-            "borderThickness": 1,
-            "shadowAlpha": 0
-        },
-        "graphs": [{
-            "id": "g1",
-            "balloon": {
-                "drop": true,
-                "adjustBorderColor": false,
-                "color": "#ffffff"
-            },
-            "bullet": "round",
-            "bulletBorderAlpha": 1,
-            "bulletColor": "#FFFFFF",
-            "bulletSize": 5,
-            "hideBulletsCount": 50,
-            "lineThickness": 2,
-            "title": "red line",
-            "useLineColorForBulletBorder": true,
-            "valueField": "value",
-            "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
-        }],
-        "chartScrollbar": {
-            "graph": "g1",
-            "oppositeAxis": false,
-            "offset": 30,
-            "scrollbarHeight": 80,
-            "backgroundAlpha": 0,
-            "selectedBackgroundAlpha": 0.1,
-            "selectedBackgroundColor": "#888888",
-            "graphFillAlpha": 0,
-            "graphLineAlpha": 0.5,
-            "selectedGraphFillAlpha": 0,
-            "selectedGraphLineAlpha": 1,
-            "autoGridCount": true,
-            "color": "#AAAAAA"
-        },
-        "chartCursor": {
-            "pan": true,
-            "valueLineEnabled": true,
-            "valueLineBalloonEnabled": true,
-            "cursorAlpha": 1,
-            "cursorColor": "#258cbb",
-            "limitToGraph": "g1",
-            "valueLineAlpha": 0.2,
-            "valueZoomable": true
-        },
-        "valueScrollbar": {
-            "oppositeAxis": false,
-            "offset": 50,
-            "scrollbarHeight": 10
-        },
-        "categoryField": "date",
-        "categoryAxis": {
-            "parseDates": true,
-            "dashLength": 1,
-            "minorGridEnabled": true
-        },
-        "export": {
-            "enabled": true
-        },
-        "dataProvider": data
-    });
+    return AmCharts.makeChart(chart, data);
 }
