@@ -15,7 +15,6 @@ Pandas and Scikit Learn was used to develop a linear regression model to predict
 
 In order to run a dev server on your local host, you will need to install the required python packages:
 
-`cd ..`
 `pip install -r requirements.txt`
 
 Now you can open up a terminal and start up a server for the backend on port 5000:
