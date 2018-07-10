@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Linear Regression"
+    },
+    {
+        "id": 2,
+        "name": "Bayesian Ridge Regression"
+    },
+    {
+        "id": 3,
+        "name": "Ridge Regression"
+    },
+    {
+        "id": 4,
+        "name": "Support Vector Machine"
+    },
+    {
+        "id": 5,
+        "name": "ARIMA Regression"
+    },
+    {
+        "id": 6,
+        "name": "Long Short Term Memory"
+    }
+]

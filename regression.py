@@ -1,4 +1,4 @@
-from sklearn import cross_validation
+from sklearn import cross_validation, svm
 import sklearn.linear_model as lin
 
 def DatasetSplit(X, y):
@@ -7,6 +7,30 @@ def DatasetSplit(X, y):
 def LinearRegression(X, y, X_data):
     X_train, X_test, y_train, y_test = DatasetSplit(X, y)
     clf = lin.LinearRegression()
+    clf.fit(X_train, y_train)
+    accuracy = clf.score(X_test, y_test)
+    prediction = clf.predict(X_data)
+    return prediction, accuracy
+
+def BayesianRidge(X, y, X_data):
+    X_train, X_test, y_train, y_test = DatasetSplit(X, y)
+    clf = lin.BayesianRidge()
+    clf.fit(X_train, y_train)
+    accuracy = clf.score(X_test, y_test)
+    prediction = clf.predict(X_data)
+    return prediction, accuracy
+
+def RidgeRegression(X, y, X_data):
+    X_train, X_test, y_train, y_test = DatasetSplit(X, y)
+    clf = lin.Ridge()
+    clf.fit(X_train, y_train)
+    accuracy = clf.score(X_test, y_test)
+    prediction = clf.predict(X_data)
+    return prediction, accuracy
+
+def SupportVectorMachine(X, y, X_data):
+    X_train, X_test, y_train, y_test = DatasetSplit(X, y)
+    clf = svm.SVR()
     clf.fit(X_train, y_train)
     accuracy = clf.score(X_test, y_test)
     prediction = clf.predict(X_data)

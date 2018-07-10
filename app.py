@@ -1,18 +1,13 @@
 # standard py libs
-import math
-import random
 import os
 
 # project dependencies
 import quandl
-import numpy as np
-import sklearn.linear_model as lin
 from flask import Flask, request, send_from_directory
-from sklearn import preprocessing, cross_validation
 
 # project modules
-from utils import FormatForModel, PackageData
-from regression import LinearRegression, ARIMARegression, LSTMRegression
+from utils import processData, packageData 
+from regression import LinearRegression, BayesianRidge, RidgeRegression, SupportVectorMachine, ARIMARegression, LSTMRegression
 
 app = Flask(__name__)
 
@@ -37,40 +32,44 @@ def index_styles():
 @app.route('/data/stocks.json')
 def index_json_stock_data():
     return send_from_directory('public/data', 'stocks.json')
+@app.route('/data/methods.json')
+def index_json_method_data():
+    return send_from_directory('public/data', 'methods.json')
 @app.route('/data/chart_config.json')
 def index_json_chart_data():
     return send_from_directory('public/data', 'chart_config.json')
 
 @app.route('/getstockdata/')
 def getStockData():
-    # stock = request.args.get('stock', default="IBM", type=None)
-    # method = request.args.get('method', default="1", type=None)
-    stock = "IBM"
-    quandl.ApiConfig.api_key = "qWcicxSctVxrP9PhyneG"
-    allData = quandl.get('WIKI/'+stock)
-    dataLength = 251
-    allDataLength = len(allData)
-    firstDataElem = math.floor(random.random()*(allDataLength-dataLength))
-    mlData = allData[0:firstDataElem+dataLength]
+    stock = request.args.get('stock', default="IBM")
+    method = int(request.args.get('method', default="1"))
+    print(stock)
+    print(method)
 
-    mlData = FormatForModel(mlData)
+    quandl.ApiConfig.api_key = "M46EXcBvFPiHWDrdAFnY"   #"qWcicxSctVxrP9PhyneG"
+    apiData = quandl.get('WIKI/'+stock)
+    
+    X, y, X_data, data = processData(apiData)
 
-    forecast_col = 'Adj. Close'
-    forecast_out = int(math.ceil(0.12*dataLength))
+    prediction, accuracy = None, None
 
-    mlData['label'] = mlData[forecast_col].shift(-forecast_out)
-    mlData.dropna(inplace=True)
-
-    X = np.array(mlData.drop(['label'],1))
-    X = preprocessing.scale(X)
-    X_data = X[-dataLength:]
-    X = X[:-dataLength]
-    data = mlData[-dataLength:]
-    mlData = mlData[:-dataLength]
-    y = np.array(mlData['label'])
-
-    prediction, accuracy = LinearRegression(X, y, X_data)
-    return PackageData(data, prediction, accuracy)
+    if method == 1:
+        prediction, accuracy = LinearRegression(X, y, X_data)
+    elif method == 2:
+        prediction, accuracy = BayesianRidge(X, y, X_data)
+    elif method == 3:
+        prediction, accuracy = RidgeRegression(X, y, X_data)
+    elif method == 4:
+        prediction, accuracy = SupportVectorMachine(X, y, X_data)
+    elif method == 5:
+        prediction, accuracy = ARIMARegression(X, y, X_data)
+    elif method == 6:
+        prediction, accuracy = LSTMRegression(X, y, X_data)
+    else:
+        pass
+    
+    print(accuracy)
+    return packageData(data, prediction, accuracy)
 
 if __name__ == '__main__':
     if os.getenv('ENV', 'dev') == 'prod':

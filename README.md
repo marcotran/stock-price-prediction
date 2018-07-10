@@ -6,6 +6,10 @@ Trying to predict the stock market is an enticing prospect to data scientists mo
 
 Pandas and Scikit Learn was used to develop a linear regression model to predict stock price. amCharts and Angular were used to plot the data and update the stock price charts. Optimized for desktop and mobile.
 
+## Dataset
+
+
+
 ## Demo ![Under Development](./public/images/under-development-orange.svg)
 
 - View demo at <https://stock-price-prediction.herokuapp.com/>
