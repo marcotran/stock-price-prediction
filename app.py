@@ -47,7 +47,7 @@ def getStockData():
     print(method)
 
     quandl.ApiConfig.api_key = "M46EXcBvFPiHWDrdAFnY"   #"qWcicxSctVxrP9PhyneG"
-    apiData = quandl.get('WIKI/'+stock)
+    apiData = quandl.get('WIKI/' + stock)
     
     X, y, X_data, data = processData(apiData)
 

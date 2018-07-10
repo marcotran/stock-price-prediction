@@ -2,13 +2,22 @@
 
 This is a comparative analysis of various regression algorithms that can be used to predict stock prices.
 
-Trying to predict the stock market is an enticing prospect to data scientists motivated not so much as a desire for material gain, but for the challenge. We see the daily up and downs of the market and imagine there must be patterns we, or our models, can learn in order to beat all those day traders with business degrees.
+Trying to predict the stock market is an enticing prospect to data scientists motivated not so much as a desire for material gain, but for the challenge. We see the daily ups and downs of the market and imagine there must be patterns we, or our models, can learn in order to beat all those day traders with business degrees.
 
-Pandas and Scikit Learn was used to develop a linear regression model to predict stock price. amCharts and Angular were used to plot the data and update the stock price charts. Optimized for desktop and mobile.
+Scikit Learn, TensorFlow and Keras were used to develop various regression models to predict stock prices. amCharts and Angular.js were used to plot the data and update the stock price charts. Optimized for desktop and mobile.
 
-## Dataset
+## Algorithms Analysed
 
+* Linear Regression
+* Bayesian Ridge Regression
+* Ridge Regression
+* Support Vector Machine
+* ARIMA Regression
+* LSTM Regression Model
 
+## Data
+
+Historical Stock Price Data is being accessed through [Quandl](https://www.quandl.com/) that offers a simple [API](https://docs.quandl.com/) for stock market data downloads. Their daily data feeds deliver end-of-day prices, historical stock fundamental data, harmonized fundamentals, financial ratios, indexes, options and volatility, earnings estimates, analyst ratings, investor sentiment etc.
 
 ## Demo ![Under Development](./public/images/under-development-orange.svg)
 
@@ -32,13 +41,14 @@ Now you are all set up!
 ## Built With
 
 * Python
-* Flask
-* Angular
-* amCharts
 * TensorFlow
 * Keras
 * Pandas
 * Scikit Learn
+* Flask
+* Quandl
+* Angular.js
+* amCharts
 
 ## Authors
 
