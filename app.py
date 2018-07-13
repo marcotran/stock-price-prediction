@@ -3,11 +3,12 @@ import os
 
 # project dependencies
 import quandl
+import pandas as pd
 from flask import Flask, request, send_from_directory
 
 # project modules
 from utils import processData, packageData 
-from regression import LinearRegression, BayesianRidge, RidgeRegression, SupportVectorMachine, ARIMARegression, LSTMRegression
+from regression import *
 
 app = Flask(__name__)
 
@@ -49,27 +50,31 @@ def getStockData():
     quandl.ApiConfig.api_key = "M46EXcBvFPiHWDrdAFnY"   #"qWcicxSctVxrP9PhyneG"
     apiData = quandl.get('WIKI/' + stock)
     
-    X, y, X_data, data = processData(apiData)
+    X_model, y_model, X_predict, y_actual, arima_model, arima_predict = processData(apiData)
 
     prediction, accuracy = None, None
 
     if method == 1:
-        prediction, accuracy = LinearRegression(X, y, X_data)
+        prediction, accuracy = LinearRegression(X_model, y_model, X_predict)
     elif method == 2:
-        prediction, accuracy = BayesianRidge(X, y, X_data)
+        prediction, accuracy = BayesianRidge(X_model, y_model, X_predict)
     elif method == 3:
-        prediction, accuracy = RidgeRegression(X, y, X_data)
+        prediction, accuracy = RidgeRegression(X_model, y_model, X_predict)
     elif method == 4:
-        prediction, accuracy = SupportVectorMachine(X, y, X_data)
+        prediction, accuracy = SupportVectorMachine(X_model, y_model, X_predict)
     elif method == 5:
-        prediction, accuracy = ARIMARegression(X, y, X_data)
+        prediction, accuracy = ARIMARegression(arima_model, arima_predict)
     elif method == 6:
-        prediction, accuracy = LSTMRegression(X, y, X_data)
+        prediction, accuracy = LSTMRegression(X_model, y_model, X_predict)
+    elif method == 7:
+        prediction, accuracy = ARDRegression(X_model, y_model, X_predict)
+    elif method == 8:
+        prediction, accuracy = ElasticNet(X_model, y_model, X_predict)
     else:
         pass
-    
+
     print(accuracy)
-    return packageData(data, prediction, accuracy)
+    return packageData(y_actual, prediction, accuracy)
 
 if __name__ == '__main__':
     if os.getenv('ENV', 'dev') == 'prod':

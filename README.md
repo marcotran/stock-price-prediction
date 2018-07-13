@@ -1,4 +1,4 @@
-# Overview
+# Overview ![Under Development](./public/images/under-development-orange.svg)
 
 This is a comparative analysis of various regression algorithms that can be used to predict stock prices.
 
@@ -14,12 +14,14 @@ Scikit Learn, TensorFlow and Keras were used to develop various regression model
 * Support Vector Machine
 * ARIMA Regression
 * LSTM Regression Model
+* Automatic Relevance Determination
+* Elastic Net
 
 ## Data
 
 Historical Stock Price Data is being accessed through [Quandl](https://www.quandl.com/) that offers a simple [API](https://docs.quandl.com/) for stock market data downloads. Their daily data feeds deliver end-of-day prices, historical stock fundamental data, harmonized fundamentals, financial ratios, indexes, options and volatility, earnings estimates, analyst ratings, investor sentiment etc.
 
-## Demo ![Under Development](./public/images/under-development-orange.svg)
+## Demo
 
 - View demo at <https://stock-price-prediction.herokuapp.com/>
 
@@ -45,6 +47,7 @@ Now you are all set up!
 * Keras
 * Pandas
 * Scikit Learn
+* Statsmodels
 * Flask
 * Quandl
 * Angular.js

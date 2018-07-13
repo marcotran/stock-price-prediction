@@ -22,5 +22,13 @@
     {
         "id": 6,
         "name": "Long Short Term Memory"
+    }, 
+    {
+        "id": 7,
+        "name": "Automatic Relevance Determination"
+    }, 
+    {
+        "id": 8,
+        "name": "Elastic Net"
     }
 ]

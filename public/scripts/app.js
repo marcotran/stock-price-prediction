@@ -62,7 +62,7 @@ myApp.controller('MarketController', ['$scope', '$http', 'moment', function($sco
                 predictedData[i] = {};
                 actualData[i].date = moment(data[i]["Date"]).format('YYYY-MM-DD');
                 predictedData[i].date = moment(moment(data[i]["Date"]).format('YYYY-MM-DD'), "YYYY-MM-DD").add(1, 'years').format('YYYY-MM-DD');
-                actualData[i].value = data[i]["EOD"];
+                actualData[i].value = data[i]["actual"];
                 predictedData[i].value = data[i]["prediction"];
             }
             var chart_config_1 = JSON.parse(JSON.stringify(chart_config));

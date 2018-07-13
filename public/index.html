@@ -8,13 +8,13 @@
     <title>Stock Price Prediction</title>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stock-price-prediction.herokuapp.com/styles/main.css">
-    <!-- <link rel="stylesheet" href="http://localhost:5000/styles/main.css"> -->
+    <!-- <link rel="stylesheet" href="https://stock-price-prediction.herokuapp.com/styles/main.css"> -->
+    <link rel="stylesheet" href="http://localhost:5000/styles/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
-    <script src="https://stock-price-prediction.herokuapp.com/scripts/lib/moment.js"></script>
-    <!-- <script src="http://localhost:5000/scripts/lib/moment.js"></script> -->
-    <script src="https://stock-price-prediction.herokuapp.com/scripts/lib/angular-moment.min.js"></script>
-    <!-- <script src="http://localhost:5000/scripts/lib/angular-moment.min.js"></script> -->
+    <!-- <script src="https://stock-price-prediction.herokuapp.com/scripts/lib/moment.js"></script> -->
+    <script src="http://localhost:5000/scripts/lib/moment.js"></script>
+    <!-- <script src="https://stock-price-prediction.herokuapp.com/scripts/lib/angular-moment.min.js"></script> -->
+    <script src="http://localhost:5000/scripts/lib/angular-moment.min.js"></script>
 </head>
 
 <body>
@@ -30,7 +30,7 @@
                 </div>
                 <div id="data">
                     <div class="h5 text-center">{{current_stock.name}} <p class="lead" style="display: inline;font-size: 0.9rem;">{{current_stock.ticker}}</p></div>
-                    <p class="lead">Actual Data</p>
+                    <p class="lead">Previous Year's Data</p>
                     <div id="chartdiv1" class="chart"></div>
                     <p class="lead">Predicted Data</p>
                     <div id="chartdiv2" class="chart"></div>
@@ -62,8 +62,8 @@
     <script src="https://www.amcharts.com/lib/3/serial.js"></script>
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
-    <script src="https://stock-price-prediction.herokuapp.com/scripts/app.js"></script>
-    <!-- <script src="http://localhost:5000/scripts/app.js"></script> -->
+    <!-- <script src="https://stock-price-prediction.herokuapp.com/scripts/app.js"></script> -->
+    <script src="http://localhost:5000/scripts/app.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>

@@ -26,18 +26,30 @@ def processData(apiData):
     mlData['label'] = mlData[forecast_col].shift(-forecast_out)
     mlData.dropna(inplace=True)
 
-    X = np.array(mlData.drop(['label'],1))
+    # get all the columns except the ouput label
+    X = np.array(mlData.drop(['label'], 1))
+    # preprocess data
     X = preprocessing.scale(X)
-    X_data = X[-dataLength:]
-    X = X[:-dataLength]
-    data = mlData[-dataLength:]
+    # separate some of the data to be predicted
+
+    X_arima = mlData[['label']]
+
+    X_arima_predict = X_arima[-dataLength:]
+    X_arima_model = X_arima[:-dataLength]
+
+    X_predict = X[-dataLength:]
+    # separate the rest of the data for the model to be trained on
+    X_model = X[:-dataLength]
+    # get the output labels of the data to be predicted
+    y_actual = mlData[-dataLength:]
+    y_actual = y_actual[['Adj. Close']]
     mlData = mlData[:-dataLength]
-    y = np.array(mlData['label'])
-    return X, y, X_data, data
+    y_model = np.array(mlData['label'])
+
+    return X_model, y_model, X_predict, y_actual, X_arima_model, X_arima_predict
 
 def packageData(data, prediction, accuracy):
-    data = data[['Adj. Close']]
-    data = data.rename(columns={'Adj. Close':'EOD'})
+    data = data.rename(columns={'Adj. Close':'actual'})
     data['prediction'] = prediction[:]
     data = data.to_json(orient='table')
     return jsonify(data)
