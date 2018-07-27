@@ -1,42 +1,19 @@
+from math import sqrt
+
 import quandl
+import numpy as np
 from sklearn import cross_validation
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
-from math import sqrt
 from keras.layers.core import Dense, Activation, Dropout
 from keras.layers.recurrent import LSTM
 from keras.models import Sequential
-from utils import processData
-from pandas import Series
-import numpy as np
-from pandas import read_csv
-from pandas import datetime
+from pandas import Series, DataFrame, concat
 from matplotlib import pyplot
 
-stock = "AAPL"
+from utils import processData
 
-quandl.ApiConfig.api_key = "M46EXcBvFPiHWDrdAFnY"   #"qWcicxSctVxrP9PhyneG"
-apiData = quandl.get('WIKI/' + stock)
-
-print(apiData)
-    
-X, y, X_data, data = processData(apiData)
-
-X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.1)
-
-print("X_train", X_train.shape)
-print("y_train", y_train.shape)
-print("X_test", X_test.shape)
-print("y_test", y_test.shape)
-
-print(type(X_train))
-print(type(y_train))
-
-print(X_train[0])
-print(X_train[1])
-
-input_dim = X_train.shape[1]
-output_dim = 1
+# DATA PREPROCESSING FUNCTIONS
 
 # frame a sequence as a supervised learning problem
 def timeseries_to_supervised(data, lag=1):
@@ -87,6 +64,8 @@ def invert_scale(scaler, X, value):
     inverted = scaler.inverse_transform(array)
     return inverted[0, -1]
 
+# LSTM MODEL FUNCTIONS
+
 def fit_model(train, batch_size, epochs, neurons):
     
     # preprocess the training set
@@ -119,66 +98,68 @@ def forecast(model, batch_size, X):
     
     return yhat[0, 0]
 
-# date-time parsing function for loading the dataset
-def parser(x):
-    return datetime.strptime('190'+x, '%Y-%m')
+def LSTMRegression(train_prep, test_prep):
 
-# load dataset
-series = read_csv('shampoo_sales.csv', header=0, parse_dates=[0], index_col=0, squeeze=True, date_parser=parser)
+    # stock = "AAPL"
 
-# transform data to be stationary
-raw_values = series.values
-diff_values = difference(raw_values, 1)
- 
-# transform data to be supervised learning
-supervised = timeseries_to_supervised(diff_values, 1)
-supervised_values = supervised.values
- 
-# split data into train and test-sets (Train: 2 years; Test: 1 year)
-train, test = supervised_values[0:-12], supervised_values[-12:]
- 
-# transform the scale of the data
-scaler, train_scaled, test_scaled = scale(train, test)
- 
-# fit the model with 4 LSTM neurons for batch of 1 and 3000 epochs 
-lstm_model = fit_model(train_scaled, 1, 1500, 1)
+    # quandl.ApiConfig.api_key = "M46EXcBvFPiHWDrdAFnY"   #"qWcicxSctVxrP9PhyneG"
+    # apiData = quandl.get('WIKI/' + stock)
 
-# forecast the entire training dataset to build up state for forecasting
-train_reshaped = train_scaled[:, 0].reshape(len(train_scaled), 1, 1)
+    # _, _, _, _, train_prep, test_prep = processData(apiData)
 
-# seed the state by making a prediction on all samples 
-# in the training dataset so that  the internal state 
-# be set up ready to forecast the next time step
-lstm_model.predict(train_reshaped, batch_size=1)
- 
-# walk-forward validation on the test data
-predictions = list()
-
-# iteratively predict on each element in test set
-for i in range(len(test_scaled)):
+    # transform data to be stationary
+    train_raw, test_raw = train_prep.values, test_prep.values
+    train_diff, test_diff = difference(train_raw, 1), difference(test_raw, 1)
     
-    # make one-step forecast
-    X, y = test_scaled[i, 0:-1], test_scaled[i, -1]
+    # transform data to be supervised learning
+    train_supervised, test_supervised = timeseries_to_supervised(train_diff, 1), timeseries_to_supervised(test_diff, 1)
+    train, test = train_supervised.values, test_supervised.values
     
-    # make the prediction
-    yhat = forecast(lstm_model, 1, X)
+    # transform the scale of the data
+    scaler, train_scaled, test_scaled = scale(train, test)
     
-    # invert scaling and differencing
-    yhat = invert_scale(scaler, X, yhat)
-    yhat = inverse_difference(raw_values, yhat, len(test_scaled)+1-i)
+    # fit the model with 4 LSTM neurons for batch of 1 and 3000 epochs 
+    lstm_model = fit_model(train_scaled, 1, 500, 4)
 
-    # store forecast
-    predictions.append(yhat)
+    # forecast the entire training dataset to build up state for forecasting
+    train_reshaped = train_scaled[:, 0].reshape(len(train_scaled), 1, 1)
+
+    # seed the state by making a prediction on all samples 
+    # in the training dataset so that  the internal state 
+    # be set up ready to forecast the next time step
+    lstm_model.predict(train_reshaped, batch_size=1)
     
-    # print result
-    expected = raw_values[len(train) + i + 1]
-    print('Month=%d, Predicted=%f, Expected=%f' % (i+1, yhat, expected))
+    # walk-forward validation on the test data
+    predictions = list()
 
-# report model performance
-rmse = sqrt(mean_squared_error(raw_values[-12:], predictions))
-print('Test RMSE: %.3f' % rmse)
+    # iteratively predict on each element in test set
+    for i in range(len(test_scaled)):
+        
+        # make one-step forecast
+        X, y = test_scaled[i, 0:-1], test_scaled[i, -1]
+        
+        # make the prediction
+        yhat = forecast(lstm_model, 1, X)
+        
+        # invert scaling and differencing
+        yhat = invert_scale(scaler, X, yhat)
+        yhat = inverse_difference(raw_values, yhat, len(test_scaled)+1-i)
 
-# line plot of observed vs predicted
-pyplot.plot(raw_values[-12:])
-pyplot.plot(predictions)
-pyplot.show()
+        # store forecast
+        predictions.append(yhat)
+        
+        # print result
+        expected = raw_values[len(train) + i + 1]
+        # print('Month=%d, Predicted=%f, Expected=%f' % (i+1, yhat, expected))
+
+    # report model performance
+    rmse = sqrt(mean_squared_error(raw_values[-12:], predictions))
+    return predictions, rmse
+    # print('Test RMSE: %.3f' % rmse)
+
+    # # line plot of observed vs predicted
+    # pyplot.plot(test_raw)
+    # pyplot.plot(predictions)
+    # pyplot.show()
+
+# LSTMRegression()

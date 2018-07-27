@@ -1,4 +1,4 @@
-from sklearn import cross_validation, svm
+from sklearn import svm
 import sklearn.linear_model as lin
 from statsmodels.tsa import arima_model
 from sklearn.metrics import mean_squared_error
@@ -7,8 +7,7 @@ from keras.layers.recurrent import LSTM
 from keras.models import Sequential
 import numpy as np
 
-def DatasetSplit(X, y):
-    return cross_validation.train_test_split(X, y, test_size=0.1)
+from utils import DatasetSplit
 
 def LinearRegression(X_model, y_model, X_predict):
     X_train, X_test, y_train, y_test = DatasetSplit(X_model, y_model)
@@ -60,43 +59,6 @@ def ARIMARegression(model, predict):
     accuracy = error
     print('ARIMA Test MSE: %.3f' % error)
     return predictions, accuracy
-
-def LSTMRegression(X_model, y_model, X_predict):
-    X_train, X_test, y_train, y_test = DatasetSplit(X_model, y_model)
-
-    input_dim = None
-    output_dim = None 
-    return_sequences = None
-    
-    model = Sequential()
-    model.add(LSTM(
-        input_shape=(None, input_dim),
-        units=output_dim,
-        return_sequences=return_sequences))
-    model.add(Dropout(0.2))
-    model.add(LSTM(
-        128, 
-        return_sequences=False))
-    model.add(Dropout(0.2))
-    model.add(Dense(units=1))
-    model.add(Activation('linear'))
-
-    model.compile(loss='mean_squared_error', optimizer='adam', metrics = ["accuracy"])
-    model.fit(X=X_train, y=y_train, epochs=20, batch_size=50, verbose=1)
-
-    preds = model.evaluate(X=X_test, y=y_test, verbose  = 1)
-
-    loss = preds[0]
-    accuracy = preds[0]
-
-    prediction = model.predict(X_predict)
-
-    print()
-    print ("Loss = " + str(loss))
-    print ("Test Accuracy = " + str(accuracy))
-    print(model.predict(X_data))
-
-    return prediction, accuracy
 
 def ARDRegression(X_model, y_model, X_predict):
     X_train, X_test, y_train, y_test = DatasetSplit(X_model, y_model)

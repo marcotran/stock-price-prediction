@@ -3,6 +3,10 @@ import random
 import numpy as np
 from flask import jsonify
 from sklearn import preprocessing
+from sklearn import cross_validations
+
+def DatasetSplit(X, y):
+    return cross_validation.train_test_split(X, y, test_size=0.1)
 
 def formatForModel(dataArray):
     dataArray = dataArray[['Adj. Open', 'Adj. High', 'Adj. Low', 'Adj. Close', 'Adj. Volume']]

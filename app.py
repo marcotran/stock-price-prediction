@@ -7,8 +7,9 @@ import pandas as pd
 from flask import Flask, request, send_from_directory
 
 # project modules
-from utils import processData, packageData 
+from utils import processData, packageData
 from regression import *
+from lstm import LSTMRegression
 
 app = Flask(__name__)
 
@@ -50,9 +51,9 @@ def getStockData():
     quandl.ApiConfig.api_key = "M46EXcBvFPiHWDrdAFnY"   #"qWcicxSctVxrP9PhyneG"
     apiData = quandl.get('WIKI/' + stock)
     
-    X_model, y_model, X_predict, y_actual, arima_model, arima_predict = processData(apiData)
+    X_model, y_model, X_predict, y_actual, model_ts_train, model_ts_test = processData(apiData)
 
-    prediction, accuracy = None, None
+    prediction, accuracy, rmse, result = None, None, None, None
 
     if method == 1:
         prediction, accuracy = LinearRegression(X_model, y_model, X_predict)
@@ -63,9 +64,9 @@ def getStockData():
     elif method == 4:
         prediction, accuracy = SupportVectorMachine(X_model, y_model, X_predict)
     elif method == 5:
-        prediction, accuracy = ARIMARegression(arima_model, arima_predict)
+        prediction, rmse = ARIMARegression(model_ts_train, model_ts_test)
     elif method == 6:
-        prediction, accuracy = LSTMRegression(X_model, y_model, X_predict)
+        prediction, rmse = LSTMRegression(model_ts_train, model_ts_test)
     elif method == 7:
         prediction, accuracy = ARDRegression(X_model, y_model, X_predict)
     elif method == 8:
@@ -73,8 +74,13 @@ def getStockData():
     else:
         pass
 
-    print(accuracy)
-    return packageData(y_actual, prediction, accuracy)
+    if accuracy is None: 
+        result = "RMSE: " + str(rmse)
+    else:      
+        result = "Accuracy: " + str(accuracy)
+    print(result)
+
+    return packageData(y_actual, prediction, result)
 
 if __name__ == '__main__':
     if os.getenv('ENV', 'dev') == 'prod':
