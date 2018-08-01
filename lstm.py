@@ -82,11 +82,20 @@ def fit_model(train, batch_size, epochs, neurons):
     
     # fit the model on the training set for set no. of epochs 
     # controlling how the state of the model changes with each epoch
+    losses = list()
     for i in range(epochs):
         history = model.fit(X, y, epochs=1, batch_size=batch_size, verbose=0, shuffle=False)
+        loss = history.history['loss'][0]
+        losses.append(loss)
         print("Epoch {}/{}".format(i + 1, epochs))
-        print("loss: {:0.6f}".format(history.history['loss'][0]))
+        print("loss: {:0.6f}".format(loss))
         model.reset_states()
+    
+    print()
+    print("Initial loss: {:0.6f}".format(losses[0]))
+    print("Intermediate loss: {:0.6f}".format(losses[int(epochs / 2)]))
+    print("Final loss: {:0.6f}".format(losses[-1]))
+    print()
     
     return model
 
@@ -121,7 +130,7 @@ def LSTMRegression(train_prep, test_prep):
     scaler, train_scaled, test_scaled = scale(train, test)
     
     # fit the model with 4 LSTM neurons for batch of 1 and 3000 epochs 
-    lstm_model = fit_model(train_scaled, 1, 200, 4)
+    lstm_model = fit_model(train_scaled, 1, 1500, 4)
 
     # forecast the entire training dataset to build up state for forecasting
     train_reshaped = train_scaled[:, 0].reshape(len(train_scaled), 1, 1)
