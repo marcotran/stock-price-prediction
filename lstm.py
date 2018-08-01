@@ -78,12 +78,14 @@ def fit_model(train, batch_size, epochs, neurons):
     model.add(Dense(1))
     
     # compile the model using loss as MSE and ADAM optimizer
-    model.compile(loss='mean_squared_error', optimizer='adam')
+    model.compile(optimizer='adam', loss='mean_squared_error')
     
     # fit the model on the training set for set no. of epochs 
     # controlling how the state of the model changes with each epoch
     for i in range(epochs):
-        model.fit(X, y, epochs=1, batch_size=batch_size, verbose=0, shuffle=False)
+        history = model.fit(X, y, epochs=1, batch_size=batch_size, verbose=0, shuffle=False)
+        print("Epoch {}/{}".format(i + 1, epochs))
+        print("loss: {:0.6f}".format(history.history['loss'][0]))
         model.reset_states()
     
     return model
@@ -100,12 +102,12 @@ def forecast(model, batch_size, X):
 
 def LSTMRegression(train_prep, test_prep):
 
-    # stock = "AAPL"
+    stock = "AAPL"
 
-    # quandl.ApiConfig.api_key = "M46EXcBvFPiHWDrdAFnY"   #"qWcicxSctVxrP9PhyneG"
-    # apiData = quandl.get('WIKI/' + stock)
+    quandl.ApiConfig.api_key = "M46EXcBvFPiHWDrdAFnY"   #"qWcicxSctVxrP9PhyneG"
+    apiData = quandl.get('WIKI/' + stock)
 
-    # _, _, _, _, train_prep, test_prep = processData(apiData)
+    _, _, _, _, train_prep, test_prep = processData(apiData)
 
     # transform data to be stationary
     train_raw, test_raw = train_prep.values, test_prep.values
@@ -119,7 +121,7 @@ def LSTMRegression(train_prep, test_prep):
     scaler, train_scaled, test_scaled = scale(train, test)
     
     # fit the model with 4 LSTM neurons for batch of 1 and 3000 epochs 
-    lstm_model = fit_model(train_scaled, 1, 500, 4)
+    lstm_model = fit_model(train_scaled, 1, 200, 4)
 
     # forecast the entire training dataset to build up state for forecasting
     train_reshaped = train_scaled[:, 0].reshape(len(train_scaled), 1, 1)
@@ -143,23 +145,23 @@ def LSTMRegression(train_prep, test_prep):
         
         # invert scaling and differencing
         yhat = invert_scale(scaler, X, yhat)
-        yhat = inverse_difference(raw_values, yhat, len(test_scaled)+1-i)
+        yhat = inverse_difference(np.append(train_raw, test_raw), yhat, len(test_scaled)+1-i)
 
         # store forecast
         predictions.append(yhat)
         
         # print result
-        expected = raw_values[len(train) + i + 1]
-        # print('Month=%d, Predicted=%f, Expected=%f' % (i+1, yhat, expected))
+        expected = test_raw[i + 1]
+        print('Month=%d, Predicted=%f, Expected=%f' % (i + 1, yhat, expected))
 
     # report model performance
-    rmse = sqrt(mean_squared_error(raw_values[-12:], predictions))
+    rmse = sqrt(mean_squared_error(test_raw, predictions))
     return predictions, rmse
-    # print('Test RMSE: %.3f' % rmse)
+    print('Test RMSE: %.3f' % rmse)
 
-    # # line plot of observed vs predicted
-    # pyplot.plot(test_raw)
-    # pyplot.plot(predictions)
-    # pyplot.show()
+    # line plot of observed vs predicted
+    pyplot.plot(test_raw)
+    pyplot.plot(predictions)
+    pyplot.show()
 
-# LSTMRegression()
+LSTMRegression(None, None)

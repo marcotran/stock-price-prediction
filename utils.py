@@ -3,7 +3,7 @@ import random
 import numpy as np
 from flask import jsonify
 from sklearn import preprocessing
-from sklearn import cross_validations
+from sklearn import cross_validation
 
 def DatasetSplit(X, y):
     return cross_validation.train_test_split(X, y, test_size=0.1)
