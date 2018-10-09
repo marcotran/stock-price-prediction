@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
 
 def process_data(stock_data):
     pred_data = 365
-    forecast_column = 'Adj Close'
+    forecast_column = 'Open','High','Low','Close','Adj Close'
     dates = np.array(stock_data['Date'].values)
     X = np.array(stock_data[forecast_column].values)[1:]
     y = np.array(stock_data[forecast_column].shift(1))[1:]
